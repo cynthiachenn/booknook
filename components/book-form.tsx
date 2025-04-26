@@ -14,7 +14,7 @@ interface BookFormProps {
   onBookAdded: () => void;
 }
 
-export default function BookForm() {
+export default function BookForm({ onBookAdded }: BookFormProps) {
   const [book, setBook] = useState<Book>({
     title: '',
     author: '',
@@ -65,6 +65,7 @@ export default function BookForm() {
       });
       
       setSuccess('Book added successfully!');
+      onBookAdded(); // Call the refresh callback
     } catch (err: any) {
       console.error('Error adding book:', err);
       setError(err.message || 'Failed to add book. Please try again.');

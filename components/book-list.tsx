@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
+import { X } from 'lucide-react';
 
 interface Book {
   id: string;
@@ -47,6 +48,23 @@ export default function BookList() {
     }
   };
 
+  const handleDelete = async (bookId: string) => {
+    try {
+      const { error } = await supabase
+        .from('books')
+        .delete()
+        .eq('id', bookId);
+
+      if (error) throw error;
+
+      // Update the local state to remove the deleted book
+      setBooks(books.filter(book => book.id !== bookId));
+    } catch (err: any) {
+      console.error('Error deleting book:', err);
+      setError(err.message || 'Failed to delete book');
+    }
+  };
+
   if (loading) {
     return <div className="text-center">Loading books...</div>;
   }
@@ -68,9 +86,16 @@ export default function BookList() {
       {books.map((book) => (
         <div
           key={book.id}
-          className="p-4 rounded-lg border border-border bg-card hover:bg-accent transition-colors"
+          className="p-4 rounded-lg border border-border bg-card hover:bg-accent transition-colors relative"
         >
-          <h3 className="font-semibold text-lg">{book.title}</h3>
+          <button
+            onClick={() => handleDelete(book.id)}
+            className="absolute top-2 right-2 p-1 rounded-full hover:bg-destructive/10 transition-colors"
+            aria-label="Delete book"
+          >
+            <X className="h-4 w-4 text-destructive" />
+          </button>
+          <h3 className="font-semibold text-lg pr-6">{book.title}</h3>
           <p className="text-muted-foreground">by {book.author}</p>
           <p className="text-sm text-muted-foreground">
             Published in {book.publication_year}

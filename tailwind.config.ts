@@ -20,8 +20,8 @@ const config = {
     extend: {
       colors: {
         border: "#6c584c",
-        input: "#dde5b6",
-        ring: "#a98467",
+        input: "#5F8446",
+        ring: "#6c584c",
         background: "#f0ead2",
         foreground: "#6c584c",
         primary: {
